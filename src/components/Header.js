@@ -5,7 +5,7 @@ class Header extends Component {
     return (
       <header className="App-header">
         <h2>
-          Discover more Movies
+          {this.props.text}
         </h2>
       </header>
     );
