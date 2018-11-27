@@ -52,6 +52,31 @@
   max-width: 25%;
 }
 
+.errorMessage{
+  margin: auto;
+  font-weight: bold;
+  color: rgb(161, 15, 15);
+}
+
+.search{
+  display: flex;
+  flex-direction: row;
+  justify-content: center
+}
+
+input[type="button"]{
+  padding: 5px;
+  width: 80px;
+  border: none;
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+input[type="button"]:hover{
+  background-color: #282c34;
+  color: antiquewhite;
+}
+
 @media screen and (min-width: 694px) and (max-width: 915px) {
   .movie{
     max-width: 33%;

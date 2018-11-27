@@ -2,65 +2,82 @@ import React, { Component } from "react";
 import "../App.css";
 import Header from "./Header";
 import Movie from "./Movie";
-import spinner from '../ajax-loader.gif'
+import spinner from "../ajax-loader.gif";
+import Search from "./Search";
 
 /*
-  ------- LIFECYCLE -------
-  Since we have adopted the use of components in React,
-  every component we create has a lifecycle that React helps us plug into
-  i.e. we can plug into different points in the life of a component and perform functions
+  ------- USER EVENTS -------
+  Handling user events is one of our favourite features in that ReaactJS helps
+  in simplifying.
+  In Vanilla JS we usually had to handle user inputs by listening for events
+  e.g.
+  const buttonVariable = document.getElementById('button-id);
+  buttonVariable.onclick = function(e){
+    // run your function
+  }
 
-  For more on this read: https://blog.pusher.com/beginners-guide-react-component-lifecycle/
-
-  The two component lifecycles we will treat are:
-  componentDidMount and componentWillUnmount
-
-  componentDidMount: is a lifeycle in which the component has been added to the browser's DOM
-  and can now interact with other elements in the DOM tree. THis is commonly where you will want
-  to handle any DOM interaction like Animations or make an async network request or create a setInterval/setTimeout
-  function
-
-  componentWillUnmount: is a lifecyclein which the component is about to be removed from the DOM and all interactions
-  with that component must seize. This is where you will want to remove any event listener and clear any timeout that was 
-  setin order to prevent memory leaks
+  In React we can just attach the function to the onClick event handler directly as you will see below
 */
 
-const MOVIE_API_URL = 'http://www.omdbapi.com/?s=man&apikey=4a3b711b';
+const MOVIE_API_URL = "http://www.omdbapi.com/?s=man&apikey=4a3b711b";
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
       loading: true,
-      movies: []
+      movies: [],
+      errorMessage: null
     };
+
+    this.search = this.search.bind(this);
   }
 
-  componentDidMount(){
+  componentDidMount() {
     fetch(MOVIE_API_URL)
-    .then(response => response.json())
-    .then(jsonResponse => {
-      this.setState({
-        movies: jsonResponse.Search,
-        loading: false,
-      })
-    })
-    .catch(error => {
-      console.log(error);
-      this.setState({
-        loading: false,
-      })
-    })
+      .then(response => response.json())
+      .then(jsonResponse => {
+        this.setState({
+          movies: jsonResponse.Search,
+          loading: false
+        });
+      });
+  }
+
+  search(searchValue) {
+    this.setState({
+      loading: true,
+      errorMessage: null
+    });
+
+    fetch(`http://www.omdbapi.com/?s=${searchValue}&apikey=4a3b711b`)
+      .then(response => response.json())
+      .then(jsonResponse => {
+        if (jsonResponse.Response === "True") {
+          this.setState({
+            movies: jsonResponse.Search,
+            loading: false
+          });
+        } else {
+          this.setState({
+            loading: false,
+            errorMessage: jsonResponse.Error
+          });
+        }
+      });
   }
 
   render() {
     return (
       <div className="App">
         <Header text="Samuel's Movie App" />
+        <Search search={this.search} />
         <p className="App-intro">Sharing a few of our favourite movies</p>
         <div className="movies">
-          {this.state.loading ? (
-            <img className="spinner" src={spinner} alt='Loading spinner' />
+          {this.state.loading && !this.state.errorMessage ? (
+            <img className="spinner" src={spinner} alt="Loading spinner" />
+          ) : this.state.errorMessage ? (
+            <div className="errorMessage">{this.state.errorMessage}</div>
           ) : (
             this.state.movies.map((movie, index) => (
               <Movie key={`${index}-${movie.Title}`} meta={movie} />
