@@ -13,9 +13,9 @@
   color: white;
   padding: 20px;
 }
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
+.spinner {
   height: 80px;
+  margin: auto;
 }
 
 .App-intro {

@@ -2,85 +2,55 @@ import React, { Component } from "react";
 import "../App.css";
 import Header from "./Header";
 import Movie from "./Movie";
+import spinner from '../ajax-loader.gif'
 
 /*
-  ------- STATE -------
-  What is state in a React app? You can think of it as a single JavaScript object which represents all the data in your app.
-  State can be defined on any component,
-  but if you want to share state between components then it's better to define it on the top-level component.
-  State can then be passed down to child components and accessed as required.
+  ------- LIFECYCLE -------
+  Since we have adopted the use of components in React,
+  every component we create has a lifecycle that React helps us plug into
+  i.e. we can plug into different points in the life of a component and perform functions
 
-  NOTE: For now state can be created like the example below:
+  For more on this read: https://blog.pusher.com/beginners-guide-react-component-lifecycle/
 
-  constructor(){
-    super();
-    this.state = {};
-  }
+  The two component lifecycles we will treat are:
+  componentDidMount and componentWillUnmount
+
+  componentDidMount: is a lifeycle in which the component has been added to the browser's DOM
+  and can now interact with other elements in the DOM tree. THis is commonly where you will want
+  to handle any DOM interaction like Animations or make an async network request or create a setInterval/setTimeout
+  function
+
+  componentWillUnmount: is a lifecyclein which the component is about to be removed from the DOM and all interactions
+  with that component must seize. This is where you will want to remove any event listener and clear any timeout that was 
+  setin order to prevent memory leaks
 */
+
+const MOVIE_API_URL = 'http://www.omdbapi.com/?s=man&apikey=4a3b711b';
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      movies: [
-        {
-          title: "Ferris Bueller's Day Off",
-          year: "1986",
-          description:
-            "A high school wise guy is determined to have a day off from school, despite what the principal thinks of that.",
-          poster:
-            "https://m.media-amazon.com/images/M/MV5BYTk3MDljOWQtNGI2My00OTEzLTlhYjQtOTQ4ODM2MzUwY2IwXkEyXkFqcGdeQXVyNTIzOTk5ODM@._V1_SX300.jpg"
-        },
-        {
-          title: "Bridget Jones' Diary",
-          year: "2001",
-          description:
-            "A British woman is determined to improve herself while she looks for love in a year in which she keeps a personal diary.",
-          poster:
-            "https://m.media-amazon.com/images/M/MV5BYTk3MDljOWQtNGI2My00OTEzLTlhYjQtOTQ4ODM2MzUwY2IwXkEyXkFqcGdeQXVyNTIzOTk5ODM@._V1_SX300.jpg"
-        },
-        {
-          title: "Bridget Jones' Diary",
-          year: "2001",
-          description:
-            "A British woman is determined to improve herself while she looks for love in a year in which she keeps a personal diary.",
-          poster:
-            "https://m.media-amazon.com/images/M/MV5BYTk3MDljOWQtNGI2My00OTEzLTlhYjQtOTQ4ODM2MzUwY2IwXkEyXkFqcGdeQXVyNTIzOTk5ODM@._V1_SX300.jpg"
-        },
-        {
-          title: "Bridget Jones' Diary",
-          year: "2001",
-          description:
-            "A British woman is determined to improve herself while she looks for love in a year in which she keeps a personal diary.",
-          poster:
-            "https://m.media-amazon.com/images/M/MV5BYTk3MDljOWQtNGI2My00OTEzLTlhYjQtOTQ4ODM2MzUwY2IwXkEyXkFqcGdeQXVyNTIzOTk5ODM@._V1_SX300.jpg"
-        },
-        {
-          title: "Bridget Jones' Diary",
-          year: "2001",
-          description:
-            "A British woman is determined to improve herself while she looks for love in a year in which she keeps a personal diary.",
-          poster:
-            "https://m.media-amazon.com/images/M/MV5BYTk3MDljOWQtNGI2My00OTEzLTlhYjQtOTQ4ODM2MzUwY2IwXkEyXkFqcGdeQXVyNTIzOTk5ODM@._V1_SX300.jpg"
-        },
-        {
-          title: "50 First Dates",
-          year: "2004",
-          description:
-            "Henry Roth is a man afraid of commitment up until he meets the beautiful Lucy. They hit it off and Henry think he's finally found the girl of his dreams.",
-          poster:
-            "https://m.media-amazon.com/images/M/MV5BYTk3MDljOWQtNGI2My00OTEzLTlhYjQtOTQ4ODM2MzUwY2IwXkEyXkFqcGdeQXVyNTIzOTk5ODM@._V1_SX300.jpg"
-        },
-        {
-          title: "Matilda",
-          year: "1996",
-          description:
-            "Story of a wonderful little girl, who happens to be a genius, and her wonderful teacher vs. the worst parents ever and the worst school principal imaginable.",
-          poster:
-            "https://m.media-amazon.com/images/M/MV5BYTk3MDljOWQtNGI2My00OTEzLTlhYjQtOTQ4ODM2MzUwY2IwXkEyXkFqcGdeQXVyNTIzOTk5ODM@._V1_SX300.jpg"
-        }
-      ]
+      loading: true,
+      movies: []
     };
+  }
+
+  componentDidMount(){
+    fetch(MOVIE_API_URL)
+    .then(response => response.json())
+    .then(jsonResponse => {
+      this.setState({
+        movies: jsonResponse.Search,
+        loading: false,
+      })
+    })
+    .catch(error => {
+      console.log(error);
+      this.setState({
+        loading: false,
+      })
+    })
   }
 
   render() {
@@ -89,9 +59,13 @@ class App extends Component {
         <Header text="Samuel's Movie App" />
         <p className="App-intro">Sharing a few of our favourite movies</p>
         <div className="movies">
-          {this.state.movies.map((movie, index) => (
-            <Movie key={`${index}-${movie.title}`} meta={movie} />
-          ))}
+          {this.state.loading ? (
+            <img className="spinner" src={spinner} alt='Loading spinner' />
+          ) : (
+            this.state.movies.map((movie, index) => (
+              <Movie key={`${index}-${movie.Title}`} meta={movie} />
+            ))
+          )}
         </div>
       </div>
     );
