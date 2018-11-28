@@ -19,7 +19,7 @@ import Search from "./Search";
   In React we can just attach the function to the onClick event handler directly as you will see below
 */
 
-const MOVIE_API_URL = "http://www.omdbapi.com/?s=man&apikey=4a3b711b";
+const MOVIE_API_URL = "https://www.omdbapi.com/?s=man&apikey=4a3b711b";
 
 class App extends Component {
   constructor() {
@@ -50,7 +50,7 @@ class App extends Component {
       errorMessage: null
     });
 
-    fetch(`http://www.omdbapi.com/?s=${searchValue}&apikey=4a3b711b`)
+    fetch(`https://www.omdbapi.com/?s=${searchValue}&apikey=4a3b711b`)
       .then(response => response.json())
       .then(jsonResponse => {
         if (jsonResponse.Response === "True") {
