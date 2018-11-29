@@ -12,7 +12,9 @@
   font-size: calc(10px + 2vmin);
   color: white;
   padding: 20px;
+  cursor: pointer;
 }
+
 .spinner {
   height: 80px;
   margin: auto;
@@ -21,50 +23,51 @@
 .App-intro {
   font-size: large;
 }
- 
+
 /* new css for movie component */
+
 * {
   box-sizing: border-box;
 }
- 
+
 .movies {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
 }
- 
+
 .App-header h2 {
   margin: 0;
 }
- 
+
 .add-movies {
   text-align: center;
 }
- 
+
 .add-movies button {
   font-size: 16px;
   padding: 8px;
   margin: 0 10px 30px 10px;
 }
- 
+
 .movie {
   padding: 5px 25px 10px 25px;
   max-width: 25%;
 }
 
-.errorMessage{
+.errorMessage {
   margin: auto;
   font-weight: bold;
   color: rgb(161, 15, 15);
 }
 
-.search{
+.search {
   display: flex;
   flex-direction: row;
   justify-content: center
 }
 
-input[type="button"]{
+input[type="button"] {
   padding: 5px;
   width: 80px;
   border: none;
@@ -72,25 +75,25 @@ input[type="button"]{
   cursor: pointer;
 }
 
-input[type="button"]:hover{
+input[type="button"]:hover {
   background-color: #282c34;
   color: antiquewhite;
 }
 
 @media screen and (min-width: 694px) and (max-width: 915px) {
-  .movie{
+  .movie {
     max-width: 33%;
   }
 }
 
 @media screen and (min-width: 652px) and (max-width: 693px) {
-  .movie{
+  .movie {
     max-width: 50%;
   }
 }
 
 @media screen and (max-width: 651px) {
-  .movie{
+  .movie {
     max-width: 100%;
     margin: auto;
   }

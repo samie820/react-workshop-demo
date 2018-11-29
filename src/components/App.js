@@ -31,6 +31,7 @@ class App extends Component {
     };
 
     this.search = this.search.bind(this);
+    this.refreshPage = this.refreshPage.bind(this);
   }
 
   componentDidMount() {
@@ -44,6 +45,9 @@ class App extends Component {
       });
   }
 
+  refreshPage() {
+    window.location.reload();
+  }
   search(searchValue) {
     this.setState({
       loading: true,
@@ -70,7 +74,10 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Header text="Samuel's Movie App" />
+        {/* added refreshPage event to refresh page on click of header */}
+        <div onClick={this.refreshPage}>
+          <Header text="Samuel's Movie App" />
+        </div>
         <Search search={this.search} />
         <p className="App-intro">Sharing a few of our favourite movies</p>
         <div className="movies">
