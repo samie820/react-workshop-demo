@@ -5,7 +5,7 @@ import React, { Component } from "react";
     Uncontrolled Components:
         Input elements are said to be uncontrolled when their value and event changes are handling
         directly by the DOM and all we use react to do is get the value based on the input's ref (ID)
-    
+
     Controlled Components:
         Because React uses one-way data flow, we can capitalize on that and let only react handle the changes to an input component.
         Basically, this means that the 'value' property of the input field will be connected the containing React
@@ -17,32 +17,38 @@ class Search extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        searchValue: '',
-    }
+      searchValue: ""
+    };
     this.handleSearchInputChanges = this.handleSearchInputChanges.bind(this);
     this.callSearchFunction = this.callSearchFunction.bind(this);
   }
 
-  handleSearchInputChanges(e){
+  handleSearchInputChanges(e) {
     this.setState({
-        searchValue: e.target.value,
-    })
+      searchValue: e.target.value
+    });
   }
 
-  callSearchFunction(){
-      this.props.search(this.state.searchValue);
-      this.setState({
-          searchValue: ''
-      })
+  callSearchFunction(e) {
+    e.preventDefault();
+    this.props.search(this.state.searchValue);
+    this.setState({
+      searchValue: ""
+    });
   }
-
 
   render() {
     return (
-      <div className="search">
-        <input value={this.state.searchValue} onChange={this.handleSearchInputChanges} type="text" />
-        <input onClick={this.callSearchFunction} type="button" value="SEARCH" />
-      </div>
+      // added a form so that we can use the enter key to submit
+      <form className="search">
+        <input
+          value={this.state.searchValue}
+          onChange={this.handleSearchInputChanges}
+          type="text"
+        />
+
+        <input onClick={this.callSearchFunction} type="submit" value="SEARCH" />
+      </form>
     );
   }
 }
