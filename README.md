@@ -1,3 +1,5 @@
+[![Build Status](https://dev.azure.com/samuel0247/samuel/_apis/build/status/samie820.react-workshop-demo?branchName=master)](https://dev.azure.com/samuel0247/samuel/_build/latest?definitionId=1?branchName=master)
+
 # react-workshop-demo
 This is the demo application we will be building for the React Workshop on Day 1
 
